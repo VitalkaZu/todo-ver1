@@ -16,11 +16,17 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 
 const App = () => {
+    const arrTodo = [
+        {label:"Drink Beer", important:false, id:1},
+        {label:"Repair car", important:true, id:2},
+        {label:"Read book", important:true, id:3}
+    ]
+
     return (
         <div>
             <AppHeader />
             <SearchPanel />
-            <TodoList />
+            <TodoList todos = {arrTodo}/>
         </div>
     )
 }
