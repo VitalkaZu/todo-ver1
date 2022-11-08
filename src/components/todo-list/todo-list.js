@@ -1,13 +1,12 @@
 import React from "react";
 
-import TodoListItem from "../todo-list-item";
+import Task from "../task";
 
 const TodoList = ({todos})=>{
     const arrTodo = todos.map(item => {
-        const {id, ...itemProps} = item
-
+        const {id, completed, ...itemProps} = item
         return (
-            <li key = {id} className="list-group-item"><TodoListItem {...itemProps} /></li>
+            <li key = {id} className={completed ? "completed" : ""}><Task {...itemProps} /></li>
                 // label = {item.label}
                 // important = {item.important} /></li>
         )
@@ -15,9 +14,9 @@ const TodoList = ({todos})=>{
 
 
     return (
-        <ul className="list-group">
-            {arrTodo}
-        </ul>
+            <ul className="todo-list">
+                {arrTodo}
+            </ul>
     )
 }
 

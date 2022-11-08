@@ -1,21 +1,25 @@
 import React from 'react';
 // import ReactDOM from 'react-dom/client';
 import AppHeader from "../app-header";
-import SearchPanel from "../search-panel";
+import NewTaskForm from "../new-task-form";
 import TodoList from "../todo-list";
+import Footer from "../footer";
 
 const App = () => {
     const arrTodo = [
-        {label:"Drink Beer", important:false, id:1},
-        {label:"Repair car", important:true, id:2},
-        {label:"Read book", important:true, id:3}
+        {label:"Drink Beer", completed:true, publicdate:new Date(2016, 0, 1), id:1},
+        {label:"Repair car", completed:false,publicdate:new Date(2022, 0, 1), id:2},
+        {label:"Read book", completed:false, publicdate:new Date(2021, 0, 4), id:3}
     ]
 
     return (
-        <div>
+        <div className="todoapp">
             <AppHeader />
-            <SearchPanel />
-            <TodoList todos = {arrTodo}/>
+            <NewTaskForm />
+            <section className="main">
+                <TodoList todos = {arrTodo}/>
+                <Footer />
+            </section>
         </div>
     )
 }
