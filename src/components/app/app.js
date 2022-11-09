@@ -5,6 +5,8 @@ import NewTaskForm from "../new-task-form";
 import TodoList from "../todo-list";
 import Footer from "../footer";
 
+import "./app.css"
+
 const App = () => {
     const arrTodo = [
         {label:"Drink Beer", completed:true, publicdate:new Date(2016, 0, 1), id:1},
