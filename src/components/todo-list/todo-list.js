@@ -2,15 +2,16 @@ import React from "react";
 
 import Task from "../task";
 
-const TodoList = ({todos})=>{
+const TodoList = ({todos, onDeleted})=>{
     const arrTodo = todos.map(item => {
-        // const {id, completed, ...itemProps} = item
+        const {id, ...itemProps} = item
 
         // <li key = {id} className={completed ? "completed" : ""}><Task {...itemProps} /></li>
         // label = {item.label}
         // important = {item.important} /></li>
         return (
-            <Task {...item} />
+            <Task key={id} {...itemProps}
+            onDeleted={()=>onDeleted(id)}/>
         )
     })
 

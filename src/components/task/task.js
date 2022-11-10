@@ -15,13 +15,16 @@ export default class Task extends React.Component {
     }
 
     clickTask = () => {
-        this.setState({
-            completed:!this.state.completed
+        this.setState(({completed}) => {
+            return {
+                completed:!completed
+            }
         })
     }
 
     render() {
-        const {id, label, publicDate} = this.props
+        const {label, publicDate, onDeleted} = this.props
+        // console.log(id)
         const {completed} = this.state;
         let className = completed ? "completed": "";
 
@@ -32,15 +35,15 @@ export default class Task extends React.Component {
         )
 
         return (
-            <li key = {id} className={className}>
+            <li className={className}>
                 <div className="view">
-                    <input className="toggle" type="checkbox" onClick={this.clickTask} checked={completed}/>
+                    <input className="toggle" type="checkbox" onChange={this.clickTask} checked={completed}/>
                     <label>
                         <span className="description" onClick={this.taskComplete}>{label}</span>
                         <span className="created">{timeDistance}</span>
                     </label>
                     <button className="icon icon-edit"></button>
-                    <button className="icon icon-destroy"></button>
+                    <button className="icon icon-destroy" onClick={onDeleted}></button>
                 </div>
             </li>
         )

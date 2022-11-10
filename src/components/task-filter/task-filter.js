@@ -1,7 +1,6 @@
 import React from "react";
 
 export default class TaskFilter extends React.Component {
-
     render() {
         return(
             <ul className="filters">
