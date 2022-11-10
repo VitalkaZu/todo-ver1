@@ -9,9 +9,9 @@ import "./app.css"
 
 const App = () => {
     const arrTodo = [
-        {label:"Drink Beer", completed:true, publicdate:new Date(2016, 0, 1), id:1},
-        {label:"Repair car", completed:false,publicdate:new Date(2022, 0, 1), id:2},
-        {label:"Read book", completed:false, publicdate:new Date(2021, 0, 4), id:3}
+        {label:"Drink Beer", completed:true, publicDate:new Date(2016, 0, 1), id:1},
+        {label:"Repair car", completed:false,publicDate:new Date(2022, 0, 1), id:2},
+        {label:"Read book", completed:false, publicDate:new Date(2021, 0, 4), id:3}
     ]
 
     return (

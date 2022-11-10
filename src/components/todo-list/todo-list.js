@@ -4,11 +4,13 @@ import Task from "../task";
 
 const TodoList = ({todos})=>{
     const arrTodo = todos.map(item => {
-        const {id, completed, ...itemProps} = item
+        // const {id, completed, ...itemProps} = item
+
+        // <li key = {id} className={completed ? "completed" : ""}><Task {...itemProps} /></li>
+        // label = {item.label}
+        // important = {item.important} /></li>
         return (
-            <li key = {id} className={completed ? "completed" : ""}><Task {...itemProps} /></li>
-                // label = {item.label}
-                // important = {item.important} /></li>
+            <Task {...item} />
         )
     })
 
