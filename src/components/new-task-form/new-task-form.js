@@ -1,17 +1,41 @@
 import React from "react";
 
 
-const NewTaskForm = (props) => {
-    const onKeyEnter = (event) => {
-        if(event.key === 'Enter'){
-            props.addTask("TEST")
-        }
+export default class NewTaskForm extends React.Component {
+    state = {
+        label:""
     }
 
-    return (
-        <input className="new-todo" placeholder="What needs to be done?"
-        onKeyDown={onKeyEnter}/>
-    )
-}
+    onLabelChange = (e) => {
+        this.setState({
+            label: e.target.value
+            }
+        )
+    }
 
-export default NewTaskForm;
+   submitTask = (e) => {
+       e.preventDefault();
+       this.props.addTask(this.state.label)
+       this.setState({
+           label:""
+       })
+   }
+
+   // onKeyEnter = (event) => {
+   //      if(event.key === 'Enter'){
+   //          this.props.addTask("TEST")
+   //      }
+   //  }
+
+    render() {
+        return (
+            <form onSubmit={this.submitTask}>
+            <input className="new-todo" placeholder="What needs to be done?"
+                   onChange={this.onLabelChange}
+                   value={this.state.label}/>
+            </form>
+        )
+   }
+
+
+}
