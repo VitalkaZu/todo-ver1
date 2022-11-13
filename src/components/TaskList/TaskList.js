@@ -2,17 +2,17 @@ import React from "react";
 
 import Task from "../task";
 
-const TodoList = ({todos, onDeleted, completeTask})=>{
+const TaskList = (props)=>{
+    const {todos, onDeleted, completeTask, editLabelTask} = props
+
     const arrTodo = todos.map(item => {
         const {id, ...itemProps} = item
 
-        // <li key = {id} className={completed ? "completed" : ""}><Task {...itemProps} /></li>
-        // label = {item.label}
-        // important = {item.important} /></li>
         return (
             <Task key={id} {...itemProps}
             onDeleted={()=>onDeleted(id)}
-            completeTask ={() => completeTask(id)}/>
+            completeTask ={() => completeTask(id)}
+            editLabelTask = {(text) => editLabelTask(id, text)}/>
         )
     })
 
@@ -24,4 +24,4 @@ const TodoList = ({todos, onDeleted, completeTask})=>{
     )
 }
 
-export default TodoList;
+export default TaskList;

@@ -27,7 +27,10 @@ export default class TaskFilter extends React.Component {
             <ul className="filters">
                 {this.state.filter.map(el=>(
                     <li>
-                        <button key={el.key} onClick={()=> this.props.chooseFilter(el.key)}>{el.name}</button>
+                        <button key={el.key}
+                                className={el.key === this.props.filter?"filter selected":"filter"}
+                                onClick={()=> this.props.chooseFilter(el.key)}>
+                            {el.name}</button>
                     </li>
                 ))}
             </ul>

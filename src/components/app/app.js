@@ -1,8 +1,7 @@
 import React from 'react';
 // import ReactDOM from 'react-dom/client';
-import AppHeader from "../app-header";
-import NewTaskForm from "../new-task-form";
-import TodoList from "../todo-list";
+import NewTaskForm from "../NewTaskForm";
+import TaskList from "../TaskList";
 import Footer from "../footer";
 
 import "./app.css"
@@ -16,37 +15,27 @@ export default class App extends React.Component {
                 {label:"Drink Beer", completed:true, publicDate:new Date(2016, 0, 1), id:1},
                 {label:"Repair car", completed:false,publicDate:new Date(2022, 0, 1), id:2},
                 {label:"Read book", completed:false, publicDate:new Date(2021, 0, 4), id:3}
-            ],
-            filtered: []
+            ]
         }
-
-        this.state.filtered = this.state.arrTodo;
         this.chooseFilter = this.chooseFilter.bind(this);
     }
 
     maxId = 100;
 
 
-
     chooseFilter(category) {
-        // this.setState({
-        //     filter: category
-        // })
+        this.setState({
+            filter: category
+        })
+    }
 
-        console.log(category);
 
+    displayFiltered(category) {
         if (category === "all") {
-            this.setState({
-                filtered: this.state.arrTodo
-
-            })
-            return
+            return this.state.arrTodo;
         }
 
-        this.setState({
-            filtered: this.state.arrTodo.filter(el => el.completed.toString() === category)
-        })
-
+        return  this.state.arrTodo.filter(el => el.completed.toString() === category);
     }
 
     createTask(label) {
@@ -83,12 +72,39 @@ export default class App extends React.Component {
         })
     }
 
+    deleteCompletedTask = () => {
+        this.setState(({arrTodo})=>{
+            return{
+                arrTodo: arrTodo.filter(el => !el.completed)
+            }
+        })
+    }
+
     completeTask = (id) => {
         this.setState(({arrTodo}) => {
             const idx = arrTodo.findIndex((el) => el.id === id);
             const oldItem = arrTodo[idx];
             const newItem = {...oldItem,
                 completed: !oldItem.completed};
+            const before = arrTodo.slice(0, idx);
+            const after = arrTodo.slice(idx + 1);
+            const newArray = [...before,
+                newItem,
+                ...after]
+
+            return {
+                arrTodo:newArray
+            }
+        })
+    }
+
+    editLabelTask = (id, text) => {
+        console.log(`Edit ${id} new text - ${text}`)
+        this.setState(({arrTodo}) => {
+            const idx = arrTodo.findIndex((el) => el.id === id);
+            const oldItem = arrTodo[idx];
+            const newItem = {...oldItem,
+                label: text};
             const before = arrTodo.slice(0, idx);
             const after = arrTodo.slice(idx + 1);
             const newArray = [...before,
@@ -111,13 +127,17 @@ export default class App extends React.Component {
 
         return (
             <div className="todoapp">
-                <AppHeader />
+                <h1>todos</h1>
                 <NewTaskForm addTask={this.addTask}/>
                 <section className="main">
-                    <TodoList todos = {this.state.filtered}
+                    <TaskList todos = {this.displayFiltered(this.state.filter)}
                               onDeleted = {this.deleteTask}
-                              completeTask = {this.completeTask}/>
-                    <Footer completed={completedTaskCount} chooseFilter={this.chooseFilter}/>
+                              completeTask = {this.completeTask}
+                              editLabelTask = {this.editLabelTask}/>
+                    <Footer completed={completedTaskCount}
+                            chooseFilter={this.chooseFilter}
+                            filter={this.state.filter}
+                            deleteCompletedTask = {this.deleteCompletedTask}/>
                 </section>
             </div>
         )

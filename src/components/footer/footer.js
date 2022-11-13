@@ -6,8 +6,8 @@ const Footer = (props) => {
     return (
         <footer className="footer">
             <span className="todo-count">{props.completed} items left</span>
-            <TaskFilter chooseFilter={props.chooseFilter} />
-            <button className="clear-completed">Clear completed</button>
+            <TaskFilter chooseFilter={props.chooseFilter} filter={props.filter}/>
+            <button className="clear-completed" onClick={props.deleteCompletedTask}>Clear completed</button>
         </footer>
     )
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 
 
 export default class NewTaskForm extends React.Component {
@@ -15,17 +16,13 @@ export default class NewTaskForm extends React.Component {
 
    submitTask = (e) => {
        e.preventDefault();
-       this.props.addTask(this.state.label)
-       this.setState({
-           label:""
-       })
+       if (this.state.label) {
+           this.props.addTask(this.state.label)
+           this.setState({
+               label:""
+           })
+       }
    }
-
-   // onKeyEnter = (event) => {
-   //      if(event.key === 'Enter'){
-   //          this.props.addTask("TEST")
-   //      }
-   //  }
 
     render() {
         return (
@@ -38,4 +35,8 @@ export default class NewTaskForm extends React.Component {
    }
 
 
+}
+
+NewTaskForm.propTypes = {
+    addTask: PropTypes.func.isRequired
 }
