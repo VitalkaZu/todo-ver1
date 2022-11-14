@@ -2,9 +2,14 @@ import React from 'react';
 // import ReactDOM from 'react-dom/client';
 import NewTaskForm from "../NewTaskForm";
 import TaskList from "../TaskList";
-import Footer from "../footer";
+import Footer from "../Footer";
+import { v4 as uuidv4 } from 'uuid';
 
 import "./app.css"
+
+
+
+// uuidv4(); // ⇨ '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed'
 
 export default class App extends React.Component {
     constructor(props) {
@@ -12,16 +17,13 @@ export default class App extends React.Component {
         this.state = {
             filter: "all",
             arrTodo: [
-                {label:"Drink Beer", completed:true, publicDate:new Date(2016, 0, 1), id:1},
-                {label:"Repair car", completed:false,publicDate:new Date(2022, 0, 1), id:2},
-                {label:"Read book", completed:false, publicDate:new Date(2021, 0, 4), id:3}
+                {label:"Drink Beer", completed:true, publicDate:new Date(2016, 0, 1), id:uuidv4()},
+                {label:"Repair car", completed:false,publicDate:new Date(2022, 0, 1), id:uuidv4()},
+                {label:"Read book", completed:false, publicDate:new Date(2021, 0, 4), id:uuidv4()}
             ]
         }
         this.chooseFilter = this.chooseFilter.bind(this);
     }
-
-    maxId = 100;
-
 
     chooseFilter(category) {
         this.setState({
@@ -42,8 +44,8 @@ export default class App extends React.Component {
         return {
             label,
             completed: false,
-            publicDate: Date.now(),
-            id: this.maxId++
+            publicDate: new Date(),
+            id: uuidv4()
         }
     }
 
@@ -122,8 +124,6 @@ export default class App extends React.Component {
 
     render() {
         const completedTaskCount = this.state.arrTodo.filter(el => !el.completed).length;
-
-
 
         return (
             <div className="todoapp">

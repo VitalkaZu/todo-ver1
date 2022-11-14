@@ -1,5 +1,6 @@
 import React from "react";
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import {formatDistanceToNow} from 'date-fns';
+import PropTypes from 'prop-types';
 
 export default class Task extends React.Component {
 
@@ -26,7 +27,7 @@ export default class Task extends React.Component {
         }
     }
 
-     classNameEdit = () => {
+     classTask = () => {
         let classTask = "task"
         if (this.state.editing) classTask += " editing"
         if (this.props.completed) classTask += " completed"
@@ -34,12 +35,10 @@ export default class Task extends React.Component {
     }
 
     editTask = () => {
-        this.setState(({editing}) => {
-            return {
+        this.setState({
                 editing: true,
             }
-        })
-        // this.classNameEdit(true);
+        )
     }
 
     render() {
@@ -51,7 +50,7 @@ export default class Task extends React.Component {
         )
 
         return (
-            <li className={this.classNameEdit()}>
+            <li className={this.classTask()}>
                 <div className="view">
                     <input className="toggle" type="checkbox" onChange={completeTask} checked={completed}/>
                     <label >
@@ -69,25 +68,16 @@ export default class Task extends React.Component {
     }
 }
 
+Task.defaultProps = {
+    publicDate: new Date(),
+    completed: false
+};
 
-// const Task = ({label, publicdate}) => {
-//     const  timeDistance = formatDistanceToNow(
-//         publicdate,
-//         {addSuffix: true}
-//     )
-//
-//     return (
-//         <div className="view">
-//                 <input className="toggle" type="checkbox"/>
-//                     <label>
-//                         <span className="description">{label}</span>
-//                         <span className="created">{timeDistance}</span>
-//                     </label>
-//                     <button className="icon icon-edit"></button>
-//                     <button className="icon icon-destroy"></button>
-//         </div>
-//     )
-//
-// }
-//
-// export default Task;
+Task.propTypes = {
+    label: PropTypes.string.isRequired,
+    publicDate: PropTypes.instanceOf(Date),
+    completed: PropTypes.bool,
+    onDeleted: PropTypes.func.isRequired,
+    completeTask: PropTypes.func.isRequired,
+    editLabelTask: PropTypes.func.isRequired
+};

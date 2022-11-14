@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export default class TaskFilter extends React.Component {
     constructor(props) {
@@ -21,19 +22,25 @@ export default class TaskFilter extends React.Component {
         }
     }
 
-
     render() {
+        const {filter, chooseFilter} = this.props
+
         return(
             <ul className="filters">
                 {this.state.filter.map(el=>(
-                    <li>
-                        <button key={el.key}
-                                className={el.key === this.props.filter?"filter selected":"filter"}
-                                onClick={()=> this.props.chooseFilter(el.key)}>
+                    <li key={el.key}>
+                        <button
+                                className={el.key === filter?"filter selected":"filter"}
+                                onClick={()=> chooseFilter(el.key)}>
                             {el.name}</button>
                     </li>
                 ))}
             </ul>
         )
     }
+}
+
+TaskFilter.propTypes = {
+    chooseFilter: PropTypes.func.isRequired,
+    filter: PropTypes.string.isRequired
 }
