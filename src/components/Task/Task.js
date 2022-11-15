@@ -13,18 +13,17 @@ export default class Task extends React.Component {
 
   onLabelChange = (e) => {
     this.setState({
-      label: e.target.value,
+      labelState: e.target.value,
     })
   }
 
   submitTask = (e) => {
-    const { label } = this.state
+    const { labelState } = this.state
     const { editLabelTask } = this.props
     e.preventDefault()
-    if (label) {
-      editLabelTask(label)
+    if (labelState) {
+      editLabelTask(labelState)
       this.setState({
-        // label: "",
         editing: false,
       })
     }
