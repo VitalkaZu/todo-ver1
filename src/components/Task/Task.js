@@ -45,12 +45,10 @@ export default class Task extends React.Component {
     })
   }
 
-  // className="description"
-  // onClick={completeTask}
-  // onKeyDown={completeTask}
-
   render() {
-    const { label, publicDate, completed, onDeleted, completeTask } = this.props
+    // eslint-disable-next-line prettier/prettier
+    const { id, label, publicDate, completed, onDeleted, completeTask } =
+      this.props
     const { labelState } = this.state
 
     const timeDistance = formatDistanceToNow(publicDate, { addSuffix: true })
@@ -59,17 +57,16 @@ export default class Task extends React.Component {
       <li className={this.classTask()}>
         <div className="view">
           <input
+            id={id}
             className="toggle"
             type="checkbox"
             onChange={completeTask}
             checked={completed}
-            /* eslint-disable-next-line react/jsx-no-comment-textnodes */
           />
-          /* eslint-disable-next-line jsx-a11y/label-has-associated-control */
-          /* eslint-disable-next-line jsx-a11y/label-has-associated-control */
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label>
-            <span>{label}</span>
+          <label htmlFor={id}>
+            <span tabIndex="-1" role="button" className="description">
+              {label}
+            </span>
             <span className="created">{timeDistance}</span>
           </label>
           <button
@@ -104,6 +101,7 @@ Task.defaultProps = {
 }
 
 Task.propTypes = {
+  id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   publicDate: PropTypes.instanceOf(Date),
   completed: PropTypes.bool,

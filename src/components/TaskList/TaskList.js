@@ -5,13 +5,19 @@ import Task from '../Task'
 
 function TaskList({ todos, onDeleted, completeTask, editLabelTask }) {
   const arrTodo = todos.map((item) => {
-    const { id, ...itemProps } = item
+    const { id, label, publicDate, completed } = item
 
+    //
+    // /* eslint-disable-next-line react/jsx-props-no-spreading */
+    // {...props}
+    // id={id}
     return (
       <Task
         key={id}
-        /* eslint-disable-next-line react/jsx-props-no-spreading */
-        {...itemProps}
+        id={id}
+        label={label}
+        publicDate={publicDate}
+        completed={completed}
         onDeleted={() => onDeleted(id)}
         completeTask={() => completeTask(id)}
         editLabelTask={(text) => editLabelTask(id, text)}
