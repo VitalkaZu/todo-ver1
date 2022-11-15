@@ -1,2 +1,6 @@
-.eslintrc.json
-.prettierrc.json
+# Ignore artifacts:
+build
+coverage
+
+# Ignore all HTML files:
+*.html
