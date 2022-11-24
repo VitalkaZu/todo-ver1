@@ -1,6 +1,7 @@
 import React from 'react'
-import { formatDistanceToNow } from 'date-fns'
+// import { formatDistanceToNow } from 'date-fns'
 import PropTypes from 'prop-types'
+import Timer from '../Timer'
 
 export default class Task extends React.Component {
   constructor(props) {
@@ -46,11 +47,10 @@ export default class Task extends React.Component {
 
   render() {
     // eslint-disable-next-line prettier/prettier
-    const { id, label, publicDate, completed, onDeleted, completeTask } =
-      this.props
+    const { id, label, completed, onDeleted, completeTask } = this.props
     const { labelState } = this.state
 
-    const timeDistance = formatDistanceToNow(publicDate, { addSuffix: true })
+    // const timeDistance = formatDistanceToNow(publicDate, { addSuffix: true }) publicDate
 
     return (
       <li className={this.classTask()}>
@@ -63,10 +63,11 @@ export default class Task extends React.Component {
             checked={completed}
           />
           <label htmlFor={id}>
-            <span tabIndex="-1" role="button" className="description">
+            <span tabIndex="-1" role="button" className="title">
               {label}
             </span>
-            <span className="created">{timeDistance}</span>
+            <Timer />
+            {/* <span className="description">{timeDistance}</span> */}
           </label>
           <button
             type="button"
@@ -95,14 +96,14 @@ export default class Task extends React.Component {
 }
 
 Task.defaultProps = {
-  publicDate: new Date(),
+  // publicDate: new Date(),
   completed: false,
 }
 
 Task.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  publicDate: PropTypes.instanceOf(Date),
+  // publicDate: PropTypes.instanceOf(Date),
   completed: PropTypes.bool,
   onDeleted: PropTypes.func.isRequired,
   completeTask: PropTypes.func.isRequired,

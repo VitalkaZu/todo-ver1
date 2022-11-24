@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './components/App'
 
-// import './index.css';
+// import './indexOLD.css';
 // import App from './App';
 // import reportWebVitals from './reportWebVitals';
 
