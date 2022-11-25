@@ -15,18 +15,21 @@ export default class App extends React.Component {
           completed: true,
           publicDate: new Date(2016, 0, 1),
           id: uuidv4(),
+          timer: 360,
         },
         {
           label: 'Repair car',
           completed: false,
           publicDate: new Date(2022, 0, 1),
           id: uuidv4(),
+          timer: 50,
         },
         {
           label: 'Read book',
           completed: false,
           publicDate: new Date(2021, 0, 4),
           id: uuidv4(),
+          timer: 1000,
         },
       ],
     }
@@ -46,11 +49,17 @@ export default class App extends React.Component {
     })
   }
 
-  addTask = (text) => {
-    const newTask = this.createTask(text)
+  addTask = (text, timer) => {
+    const newTask = this.createTask(text, timer)
 
     this.setState(({ arrTodo }) => ({
       arrTodo: [...arrTodo, newTask],
+    }))
+  }
+
+  subTime = () => {
+    this.setState(({ timer }) => ({
+      timer: timer - 1,
     }))
   }
 
@@ -91,12 +100,13 @@ export default class App extends React.Component {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  createTask(label) {
+  createTask(label, timer) {
     return {
       label,
       completed: false,
       publicDate: new Date(),
       id: uuidv4(),
+      timer,
     }
   }
 
@@ -129,6 +139,7 @@ export default class App extends React.Component {
             onDeleted={this.deleteTask}
             completeTask={this.completeTask}
             editLabelTask={this.editLabelTask}
+            subTime={this.subTime}
           />
           <Footer
             completed={completedTaskCount}

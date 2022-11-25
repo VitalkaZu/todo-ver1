@@ -11,59 +11,77 @@ export default class NewTaskForm extends React.Component {
     }
   }
 
-  onLabelChange = (e) => {
-    this.setState({
-      label: e.target.value,
-    })
+  // onLabelChange = (e) => {
+  //   this.setState({
+  //     label: e.target.value,
+  //   })
+  // }
+  handleUserInput = (e) => {
+    const { name } = e.target
+    const { value } = e.target
+    this.setState({ [name]: value })
   }
 
-  onMinChange = (e) => {
-    this.setState({
-      min: e.target.value,
-    })
-  }
-
-  onSecChange = (e) => {
-    this.setState({
-      sec: e.target.value,
-    })
-  }
+  // onMinChange = (e) => {
+  //   this.setState({
+  //     min: e.target.value,
+  //   })
+  // }
+  //
+  // onSecChange = (e) => {
+  //   this.setState({
+  //     sec: e.target.value,
+  //   })
+  // }
 
   submitTask = (e) => {
-    e.preventDefault()
-    const { label } = this.state
+    const { label, min, sec } = this.state
     const { addTask } = this.props
-    alert('submit!')
+    const timer = min * 60 + parseInt(sec, 10)
     if (label) {
-      addTask(label)
+      addTask(label, timer)
       this.setState({
         label: '',
+        min: '',
+        sec: '',
       })
     }
+    e.preventDefault()
   }
 
   render() {
     const { label, min, sec } = this.state
     return (
-      <form className="new-todo-form" onSubmit={this.submitTask}>
+      <form id="myForm" className="new-todo-form" onSubmit={this.submitTask}>
         <input
+          type="text"
           className="new-todo"
           placeholder="What needs to be done?"
-          onChange={this.onLabelChange}
+          onChange={this.handleUserInput}
+          required="required"
           value={label}
+          name="label"
         />
         <input
+          type="number"
           className="new-todo-form__timer"
-          onChange={this.onMinChange}
+          onChange={this.handleUserInput}
           value={min}
+          required="required"
           placeholder="Min"
+          name="min"
         />
         <input
+          type="number"
+          max="59"
           className="new-todo-form__timer"
-          onChange={this.onSecChange}
+          onChange={this.handleUserInput}
           value={sec}
+          required="required"
           placeholder="Sec"
+          name="sec"
         />
+        <input type="submit" hidden="hidden" />
       </form>
     )
   }

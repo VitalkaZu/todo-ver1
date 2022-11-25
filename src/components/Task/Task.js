@@ -47,7 +47,16 @@ export default class Task extends React.Component {
 
   render() {
     // eslint-disable-next-line prettier/prettier
-    const { id, label, completed, onDeleted, completeTask } = this.props
+    const {
+      id,
+      label,
+      publicDate,
+      completed,
+      onDeleted,
+      completeTask,
+      timer,
+      subTime,
+    } = this.props
     const { labelState } = this.state
 
     // const timeDistance = formatDistanceToNow(publicDate, { addSuffix: true }) publicDate
@@ -66,7 +75,7 @@ export default class Task extends React.Component {
             <span tabIndex="-1" role="button" className="title">
               {label}
             </span>
-            <Timer />
+            <Timer publicDate={publicDate} timer={timer} subTime={subTime} />
             {/* <span className="description">{timeDistance}</span> */}
           </label>
           <button

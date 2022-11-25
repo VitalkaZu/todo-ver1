@@ -5,19 +5,40 @@ export default class Timer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      publicDate: new Date(),
       dateNow: new Date(),
+      subTimeBolean: false,
       // min: null,
       // sec: null,
     }
   }
 
   componentDidMount() {
-    this.timerID = setInterval(() => this.timeDistance(), 1000)
+    this.timerID = setInterval(
+      () => () => {
+        this.timeDistance()
+        this.subTime()
+      },
+      1000
+    )
   }
 
   componentWillUnmount() {
     clearInterval(this.timerID)
+  }
+
+  onClickTimer = (e) => {
+    const { value } = e.target.name
+    this.setState({
+      subTimeBolean: value,
+    })
+  }
+
+  subTime() {
+    const { subTimeBolean } = this.state
+    const { subTime } = this.props
+    if (subTimeBolean) {
+      subTime()
+    }
   }
 
   timeDistance() {
@@ -41,7 +62,8 @@ export default class Timer extends React.Component {
   // }
 
   render() {
-    const { publicDate, dateNow } = this.state
+    const { dateNow } = this.state
+    const { publicDate, timer } = this.props
     const distanceTime = formatDistance(publicDate, dateNow, {
       addSuffix: true,
     })
@@ -52,13 +74,17 @@ export default class Timer extends React.Component {
             type="button"
             aria-label="Play timer"
             className="icon icon-play"
+            onClick={this.onClickTimer}
+            name="true"
           />
           <button
             type="button"
             aria-label="Stop timer"
             className="icon icon-pause"
+            name="false"
+            onClick={this.onClickTimer}
           />
-          {' 12:25 '}
+          {timer}
         </span>
         <span className="description">created {distanceTime}</span>
       </>
