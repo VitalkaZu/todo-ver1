@@ -11,28 +11,11 @@ export default class NewTaskForm extends React.Component {
     }
   }
 
-  // onLabelChange = (e) => {
-  //   this.setState({
-  //     label: e.target.value,
-  //   })
-  // }
   handleUserInput = (e) => {
     const { name } = e.target
     const { value } = e.target
     this.setState({ [name]: value })
   }
-
-  // onMinChange = (e) => {
-  //   this.setState({
-  //     min: e.target.value,
-  //   })
-  // }
-  //
-  // onSecChange = (e) => {
-  //   this.setState({
-  //     sec: e.target.value,
-  //   })
-  // }
 
   submitTask = (e) => {
     const { label, min, sec } = this.state

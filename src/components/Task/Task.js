@@ -1,5 +1,4 @@
 import React from 'react'
-// import { formatDistanceToNow } from 'date-fns'
 import PropTypes from 'prop-types'
 import Timer from '../Timer'
 
@@ -9,7 +8,15 @@ export default class Task extends React.Component {
     this.state = {
       labelState: props.label,
       editing: false,
+      timer: props.timer,
     }
+  }
+
+  subTime = () => {
+    console.log('subTime function call')
+    this.setState(({ timer }) => ({
+      timer: timer - 1,
+    }))
   }
 
   onLabelChange = (e) => {
@@ -47,19 +54,9 @@ export default class Task extends React.Component {
 
   render() {
     // eslint-disable-next-line prettier/prettier
-    const {
-      id,
-      label,
-      publicDate,
-      completed,
-      onDeleted,
-      completeTask,
-      timer,
-      subTime,
-    } = this.props
-    const { labelState } = this.state
-
-    // const timeDistance = formatDistanceToNow(publicDate, { addSuffix: true }) publicDate
+    const { id, label, publicDate, completed, onDeleted, completeTask } =
+      this.props
+    const { labelState, timer } = this.state
 
     return (
       <li className={this.classTask()}>
@@ -75,8 +72,11 @@ export default class Task extends React.Component {
             <span tabIndex="-1" role="button" className="title">
               {label}
             </span>
-            <Timer publicDate={publicDate} timer={timer} subTime={subTime} />
-            {/* <span className="description">{timeDistance}</span> */}
+            <Timer
+              publicDate={publicDate}
+              timer={timer}
+              subTime={this.subTime}
+            />
           </label>
           <button
             type="button"
@@ -105,14 +105,13 @@ export default class Task extends React.Component {
 }
 
 Task.defaultProps = {
-  // publicDate: new Date(),
   completed: false,
 }
 
 Task.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  // publicDate: PropTypes.instanceOf(Date),
+  publicDate: PropTypes.instanceOf(Date).isRequired,
   completed: PropTypes.bool,
   onDeleted: PropTypes.func.isRequired,
   completeTask: PropTypes.func.isRequired,

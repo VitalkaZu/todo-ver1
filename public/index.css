@@ -299,6 +299,7 @@ body {
   font-size: 18px;
   width: 18px;
   height: 18px;
+  margin-right: 8px;
 }
 
 .todo-list li .icon-play {

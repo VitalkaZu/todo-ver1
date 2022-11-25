@@ -57,12 +57,6 @@ export default class App extends React.Component {
     }))
   }
 
-  subTime = () => {
-    this.setState(({ timer }) => ({
-      timer: timer - 1,
-    }))
-  }
-
   deleteCompletedTask = () => {
     this.setState(({ arrTodo }) => ({
       arrTodo: arrTodo.filter((el) => !el.completed),

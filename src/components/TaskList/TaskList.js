@@ -22,7 +22,7 @@ function TaskList({ todos, onDeleted, completeTask, editLabelTask, subTime }) {
         onDeleted={() => onDeleted(id)}
         completeTask={() => completeTask(id)}
         editLabelTask={(text) => editLabelTask(id, text)}
-        subTime={subTime}
+        subTime={() => subTime(id)}
       />
     )
   })
