@@ -8,15 +8,7 @@ export default class Task extends React.Component {
     this.state = {
       labelState: props.label,
       editing: false,
-      timer: props.timer,
     }
-  }
-
-  subTime = () => {
-    console.log('subTime function call')
-    this.setState(({ timer }) => ({
-      timer: timer - 1,
-    }))
   }
 
   onLabelChange = (e) => {
@@ -54,9 +46,19 @@ export default class Task extends React.Component {
 
   render() {
     // eslint-disable-next-line prettier/prettier
-    const { id, label, publicDate, completed, onDeleted, completeTask } =
-      this.props
-    const { labelState, timer } = this.state
+    const {
+      id,
+      label,
+      publicDate,
+      completed,
+      onDeleted,
+      completeTask,
+      dateNow,
+      onTimer,
+      onClickTimer,
+      timer,
+    } = this.props
+    const { labelState } = this.state
 
     return (
       <li className={this.classTask()}>
@@ -76,6 +78,9 @@ export default class Task extends React.Component {
               publicDate={publicDate}
               timer={timer}
               subTime={this.subTime}
+              dateNow={dateNow}
+              onTimer={onTimer}
+              onClickTimer={() => onClickTimer()}
             />
           </label>
           <button
@@ -116,4 +121,8 @@ Task.propTypes = {
   onDeleted: PropTypes.func.isRequired,
   completeTask: PropTypes.func.isRequired,
   editLabelTask: PropTypes.func.isRequired,
+  timer: PropTypes.number.isRequired,
+  dateNow: PropTypes.instanceOf(Date).isRequired,
+  onTimer: PropTypes.func.isRequired,
+  onClickTimer: PropTypes.func.isRequired,
 }

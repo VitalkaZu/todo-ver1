@@ -3,14 +3,17 @@ import PropTypes from 'prop-types'
 
 import Task from '../Task'
 
-function TaskList({ todos, onDeleted, completeTask, editLabelTask, subTime }) {
+function TaskList({
+  todos,
+  onDeleted,
+  completeTask,
+  editLabelTask,
+  subTime,
+  dateNow,
+  onClickTimer,
+}) {
   const arrTodo = todos.map((item) => {
-    const { id, label, publicDate, completed, timer } = item
-
-    //
-    // /* eslint-disable-next-line react/jsx-props-no-spreading */
-    // {...props}
-    // id={id}
+    const { id, label, publicDate, completed, timer, onTimer } = item
     return (
       <Task
         key={id}
@@ -18,11 +21,14 @@ function TaskList({ todos, onDeleted, completeTask, editLabelTask, subTime }) {
         label={label}
         publicDate={publicDate}
         timer={timer}
+        onTimer={onTimer}
         completed={completed}
         onDeleted={() => onDeleted(id)}
         completeTask={() => completeTask(id)}
         editLabelTask={(text) => editLabelTask(id, text)}
         subTime={() => subTime(id)}
+        dateNow={dateNow}
+        onClickTimer={() => onClickTimer(id)}
       />
     )
   })
@@ -37,11 +43,16 @@ TaskList.propTypes = {
       completed: PropTypes.bool,
       publicDate: PropTypes.instanceOf(Date),
       id: PropTypes.string.isRequired,
+      timer: PropTypes.number.isRequired,
+      onTimer: PropTypes.func.isRequired,
     })
   ).isRequired,
+  dateNow: PropTypes.instanceOf(Date).isRequired,
   onDeleted: PropTypes.func.isRequired,
   completeTask: PropTypes.func.isRequired,
   editLabelTask: PropTypes.func.isRequired,
+  onClickTimer: PropTypes.func.isRequired,
+  subTime: PropTypes.func.isRequired,
 }
 
 export default TaskList

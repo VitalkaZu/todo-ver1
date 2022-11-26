@@ -9,6 +9,7 @@ export default class App extends React.Component {
     super(props)
     this.state = {
       filter: 'all',
+      dateNow: new Date(),
       arrTodo: [
         {
           label: 'Drink Beer',
@@ -16,6 +17,7 @@ export default class App extends React.Component {
           publicDate: new Date(2016, 0, 1),
           id: uuidv4(),
           timer: 360,
+          onTimer: false,
         },
         {
           label: 'Repair car',
@@ -23,6 +25,7 @@ export default class App extends React.Component {
           publicDate: new Date(2022, 0, 1),
           id: uuidv4(),
           timer: 50,
+          onTimer: false,
         },
         {
           label: 'Read book',
@@ -30,10 +33,48 @@ export default class App extends React.Component {
           publicDate: new Date(2021, 0, 4),
           id: uuidv4(),
           timer: 1000,
+          onTimer: false,
         },
       ],
     }
-    this.chooseFilter = this.chooseFilter.bind(this)
+  }
+
+  onClickTimer = (id) => {
+    this.editTaskBool(id, 'onTimer')
+  }
+
+  componentDidMount() {
+    this.intervalId = setInterval(() => {
+      this.timeDistance()
+      this.subTimer()
+    }, 1000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalId)
+  }
+
+  // необходима что-бы обновлялась запись сколько времени назад создана задача
+  timeDistance() {
+    this.setState({
+      dateNow: new Date(),
+    })
+  }
+
+  // проходим по всем таскам, если в ней включен таймер то вычитаем одну секунду
+  subTimer = () => {
+    this.setState(({ arrTodo }) => {
+      const newArray = arrTodo.map((item) => {
+        if (item.onTimer) {
+          const newValue = item.timer > 0 ? item.timer - 1 : 0
+          return { ...item, timer: newValue }
+        }
+        return item
+      })
+      return {
+        arrTodo: newArray,
+      }
+    })
   }
 
   deleteTask = (id) => {
@@ -64,10 +105,15 @@ export default class App extends React.Component {
   }
 
   completeTask = (id) => {
+    this.editTaskBool(id, 'completed')
+  }
+
+  // редактируем булево поле в конкретной таске
+  editTaskBool = (id, name) => {
     this.setState(({ arrTodo }) => {
       const idx = arrTodo.findIndex((el) => el.id === id)
       const oldItem = arrTodo[idx]
-      const newItem = { ...oldItem, completed: !oldItem.completed }
+      const newItem = { ...oldItem, [name]: !oldItem[name] }
       const before = arrTodo.slice(0, idx)
       const after = arrTodo.slice(idx + 1)
       const newArray = [...before, newItem, ...after]
@@ -113,14 +159,14 @@ export default class App extends React.Component {
     return arrTodo.filter((el) => el.completed.toString() === category)
   }
 
-  chooseFilter(category) {
+  chooseFilter = (category) => {
     this.setState({
       filter: category,
     })
   }
 
   render() {
-    const { filter, arrTodo } = this.state
+    const { filter, arrTodo, dateNow } = this.state
     const completedTaskCount = arrTodo.filter((el) => !el.completed).length
 
     return (
@@ -134,6 +180,8 @@ export default class App extends React.Component {
             completeTask={this.completeTask}
             editLabelTask={this.editLabelTask}
             subTime={this.subTime}
+            dateNow={dateNow}
+            onClickTimer={this.onClickTimer}
           />
           <Footer
             completed={completedTaskCount}
