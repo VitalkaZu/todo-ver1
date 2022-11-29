@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { formatDistanceToNow } from 'date-fns'
 import Timer from '../Timer'
 
 export default class Task extends React.Component {
@@ -8,6 +9,23 @@ export default class Task extends React.Component {
     this.state = {
       labelState: props.label,
       editing: false,
+      timerStatus: false,
+    }
+  }
+
+  //
+  // componentDidMount() {
+  //   this.intervalId = setInterval(() => {
+  //     this.timeDistance()
+  //     this.subTimer()
+  //   }, 1000)
+  // }
+
+  componentDidMount() {
+    const { timer, completed } = this.props
+    if (completed || timer <= 0) {
+      // this.setState({ timerStatus: false })
+      clearInterval(this.intervalId)
     }
   }
 
@@ -15,6 +33,40 @@ export default class Task extends React.Component {
     this.setState({
       labelState: e.target.value,
     })
+  }
+
+  componentDidUpdate(prevProps) {
+    const { timer, completed } = this.props
+    // const { timerStatus } = this.state
+    if ((prevProps.timer !== timer && timer <= 0) || completed) {
+      // this.setState({ timerStatus: false })
+      clearInterval(this.intervalId)
+      // this.stopTimer()
+    }
+    // if (prevState.timerStatus !== timerStatus && completed) {
+    //   this.setState({ timerStatus: false })
+    // }
+  }
+
+  runTimer = () => {
+    const { subTime, timer } = this.props
+    const { timerStatus } = this.state
+    if (!timerStatus && timer > 0) {
+      this.setState({ timerStatus: true })
+      this.intervalId = setInterval(() => {
+        subTime()
+      }, 1000)
+    }
+  }
+
+  stopTimer = () => {
+    this.setState({ timerStatus: false })
+    console.log('stop timer')
+    clearInterval(this.intervalId)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalId)
   }
 
   submitTask = (e) => {
@@ -46,19 +98,12 @@ export default class Task extends React.Component {
 
   render() {
     // eslint-disable-next-line prettier/prettier
-    const {
-      id,
-      label,
-      publicDate,
-      completed,
-      onDeleted,
-      completeTask,
-      dateNow,
-      onTimer,
-      onClickTimer,
-      timer,
-    } = this.props
-    const { labelState } = this.state
+    const { id, label, publicDate, completed, onDeleted, completeTask, timer } =
+      this.props
+    const { labelState, timerStatus } = this.state
+    const distanceTime = formatDistanceToNow(publicDate, {
+      addSuffix: true,
+    })
 
     return (
       <li className={this.classTask()}>
@@ -77,11 +122,13 @@ export default class Task extends React.Component {
             <Timer
               publicDate={publicDate}
               timer={timer}
-              subTime={this.subTime}
-              dateNow={dateNow}
-              onTimer={onTimer}
-              onClickTimer={() => onClickTimer()}
+              timerStatus={timerStatus}
+              // onClickTimer={() => onClickTimer()}
+              runTimer={this.runTimer}
+              stopTimer={this.stopTimer}
+              completed={completed}
             />
+            <span className="description">created {distanceTime}</span>
           </label>
           <button
             type="button"
@@ -122,7 +169,6 @@ Task.propTypes = {
   completeTask: PropTypes.func.isRequired,
   editLabelTask: PropTypes.func.isRequired,
   timer: PropTypes.number.isRequired,
-  dateNow: PropTypes.instanceOf(Date).isRequired,
-  onTimer: PropTypes.func.isRequired,
-  onClickTimer: PropTypes.func.isRequired,
+  // onClickTimer: PropTypes.func.isRequired,
+  subTime: PropTypes.func.isRequired,
 }

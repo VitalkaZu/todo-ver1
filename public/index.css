@@ -271,6 +271,10 @@ body {
   color: #af5b5e;
 }
 
+.todo-list li .icon:disabled:hover {
+  color: #898484;
+}
+
 .todo-list li .icon-destroy {
   position: absolute;
   top: 0;
