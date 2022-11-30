@@ -9,7 +9,7 @@ export default class Task extends React.Component {
     this.state = {
       labelState: props.label,
       editing: false,
-      timerStatus: false,
+      timerId: null,
     }
   }
 
@@ -21,25 +21,28 @@ export default class Task extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { timer, completed } = this.props
+    const { timerId } = this.state
     if ((prevProps.timer !== timer && timer <= 0) || completed) {
-      clearInterval(this.intervalId)
+      clearInterval(timerId)
     }
   }
 
   runTimer = () => {
     const { subTime, timer } = this.props
-    if (!this.intervalId && timer > 0) {
-      this.setState({ timerStatus: true })
-      this.intervalId = setInterval(() => {
-        subTime()
-      }, 1000)
+    const { timerId } = this.state
+    if (!timerId && timer > 0) {
+      this.setState({
+        timerId: setInterval(() => {
+          subTime()
+        }, 1000),
+      })
     }
   }
 
   stopTimer = () => {
-    this.setState({ timerStatus: false })
-    clearInterval(this.intervalId)
-    this.intervalId = null
+    const { timerId } = this.state
+    clearInterval(timerId)
+    this.setState({ timerId: null })
   }
 
   componentWillUnmount() {
@@ -77,7 +80,7 @@ export default class Task extends React.Component {
     // eslint-disable-next-line prettier/prettier
     const { id, label, publicDate, completed, onDeleted, completeTask, timer } =
       this.props
-    const { labelState, timerStatus } = this.state
+    const { labelState } = this.state
     const distanceTime = formatDistanceToNow(publicDate, {
       addSuffix: true,
     })
@@ -99,7 +102,6 @@ export default class Task extends React.Component {
             <Timer
               publicDate={publicDate}
               timer={timer}
-              timerStatus={timerStatus}
               runTimer={this.runTimer}
               stopTimer={this.stopTimer}
               completed={completed}
@@ -145,6 +147,5 @@ Task.propTypes = {
   completeTask: PropTypes.func.isRequired,
   editLabelTask: PropTypes.func.isRequired,
   timer: PropTypes.number.isRequired,
-  // onClickTimer: PropTypes.func.isRequired,
   subTime: PropTypes.func.isRequired,
 }
