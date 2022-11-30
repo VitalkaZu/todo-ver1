@@ -13,22 +13,6 @@ export default class Task extends React.Component {
     }
   }
 
-  //
-  // componentDidMount() {
-  //   this.intervalId = setInterval(() => {
-  //     this.timeDistance()
-  //     this.subTimer()
-  //   }, 1000)
-  // }
-
-  componentDidMount() {
-    const { timer, completed } = this.props
-    if (completed || timer <= 0) {
-      // this.setState({ timerStatus: false })
-      clearInterval(this.intervalId)
-    }
-  }
-
   onLabelChange = (e) => {
     this.setState({
       labelState: e.target.value,
@@ -37,21 +21,14 @@ export default class Task extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { timer, completed } = this.props
-    // const { timerStatus } = this.state
     if ((prevProps.timer !== timer && timer <= 0) || completed) {
-      // this.setState({ timerStatus: false })
       clearInterval(this.intervalId)
-      // this.stopTimer()
     }
-    // if (prevState.timerStatus !== timerStatus && completed) {
-    //   this.setState({ timerStatus: false })
-    // }
   }
 
   runTimer = () => {
     const { subTime, timer } = this.props
-    const { timerStatus } = this.state
-    if (!timerStatus && timer > 0) {
+    if (!this.intervalId && timer > 0) {
       this.setState({ timerStatus: true })
       this.intervalId = setInterval(() => {
         subTime()
@@ -61,12 +38,12 @@ export default class Task extends React.Component {
 
   stopTimer = () => {
     this.setState({ timerStatus: false })
-    console.log('stop timer')
     clearInterval(this.intervalId)
+    this.intervalId = null
   }
 
   componentWillUnmount() {
-    clearInterval(this.intervalId)
+    this.stopTimer()
   }
 
   submitTask = (e) => {
@@ -123,7 +100,6 @@ export default class Task extends React.Component {
               publicDate={publicDate}
               timer={timer}
               timerStatus={timerStatus}
-              // onClickTimer={() => onClickTimer()}
               runTimer={this.runTimer}
               stopTimer={this.stopTimer}
               completed={completed}

@@ -36,37 +36,15 @@ export default class App extends React.Component {
     }
   }
 
-  // onClickTimer = (id) => {
-  //   this.editTaskBool(id, 'onTimer')
-  // }
-
-  // componentDidMount() {
-  //   this.intervalId = setInterval(() => {
-  //     this.timeDistance()
-  //     this.subTimer()
-  //   }, 1000)
-  // }
-
   componentWillUnmount() {
     clearInterval(this.intervalId)
   }
 
-  // // необходима что-бы обновлялась запись сколько времени назад создана задача
-  // timeDistance() {
-  //   this.setState({
-  //     dateNow: new Date(),
-  //   })
-  // }
-
-  // проходим по всем таскам, если в ней включен таймер то вычитаем одну секунду
-  // eslint-disable-next-line class-methods-use-this
   subTime = (id) => {
-    console.log(`runTimer ${id}`)
     this.setState(({ arrTodo }) => {
       const idx = arrTodo.findIndex((el) => el.id === id)
       const oldItem = arrTodo[idx]
       const newValueTimer = oldItem.timer - 1
-      // const newValueTimer = oldItem.timer > 0 ? oldItem.timer - 1 : oldItem.timer
       const newItem = { ...oldItem, timer: newValueTimer }
       const before = arrTodo.slice(0, idx)
       const after = arrTodo.slice(idx + 1)
@@ -76,18 +54,6 @@ export default class App extends React.Component {
         arrTodo: newArray,
       }
     })
-    // this.setState(({ arrTodo }) => {
-    //   const newArray = arrTodo.map((item) => {
-    //     if (item.onTimer) {
-    //       const newValue = item.timer > 0 ? item.timer - 1 : 0
-    //       return { ...item, timer: newValue }
-    //     }
-    //     return item
-    //   })
-    //   return {
-    //     arrTodo: newArray,
-    //   }
-    // })
   }
 
   deleteTask = (id) => {
