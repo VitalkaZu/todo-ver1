@@ -1,47 +1,49 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-export default class Timer extends React.Component {
-  timeToString = () => {
-    const { timer } = this.props
+function Timer({ runTimer, stopTimer, completed, timer }) {
+  const timeToString = () => {
     const min = Math.floor(timer / 60)
     const sec = timer % 60
     return `${min}:${sec.toString().padStart(2, '0')}`
   }
 
-  componentDidUpdate(prevProps) {
-    const { stopTimer, completed } = this.props
-    if (completed !== prevProps.completed) {
-      stopTimer()
-    }
-  }
+  useEffect(() => {
+    stopTimer()
+  }, [completed])
 
-  render() {
-    const { runTimer, stopTimer, completed, timer } = this.props
+  // componentDidUpdate(prevProps) {
+  //   const { stopTimer, completed } = this.props
+  //   if (completed !== prevProps.completed) {
+  //     stopTimer()
+  //   }
+  // }
 
-    return (
-      <span className="description">
-        <button
-          type="button"
-          disabled={completed || timer === 0}
-          aria-label="Play timer"
-          className="icon icon-play"
-          onClick={runTimer}
-          name="true"
-        />
-        <button
-          type="button"
-          disabled={completed || timer === 0}
-          aria-label="Stop timer"
-          className="icon icon-pause"
-          name="false"
-          onClick={stopTimer}
-        />
-        {this.timeToString()}
-      </span>
-    )
-  }
+  return (
+    <span className="description">
+      <button
+        type="button"
+        disabled={completed || timer === 0}
+        aria-label="Play timer"
+        className="icon icon-play"
+        onClick={runTimer}
+        name="true"
+      />
+      <button
+        type="button"
+        disabled={completed || timer === 0}
+        aria-label="Stop timer"
+        className="icon icon-pause"
+        name="false"
+        onClick={stopTimer}
+      />
+      {timeToString()}
+    </span>
+  )
+  // const { runTimer, stopTimer, completed, timer } = this.props
 }
+
+export default Timer
 
 Timer.propTypes = {
   timer: PropTypes.number.isRequired,
