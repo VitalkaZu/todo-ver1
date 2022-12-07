@@ -1,138 +1,171 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { formatDistanceToNow } from 'date-fns'
+import useInterval from '../../userHooks/useInterval'
 import Timer from '../Timer'
 
-export default class Task extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      labelState: props.label,
-      editing: false,
-      timerId: null,
-    }
+function Task({
+  id,
+  label,
+  publicDate,
+  completed,
+  onDeleted,
+  completeTask,
+  timer,
+  editLabelTask,
+  subTime,
+}) {
+  // constructor(props) {
+  //   super(props)
+  //   this.state = {
+  //     labelState: props.label,
+  //     editing: false,
+  //     timerId: null,
+  //   }
+  // }
+
+  const [labelState, setLabelState] = useState(label)
+  const [editing, setEditing] = useState(false)
+  const [timerId, setTimerId] = useState()
+
+  const onLabelChange = (e) => {
+    setLabelState(e.target.value)
+    // this.setState({
+    //   labelState: e.target.value,
+    // })
   }
 
-  onLabelChange = (e) => {
-    this.setState({
-      labelState: e.target.value,
-    })
+  const stopTimer = () => {
+    console.log('stop timer')
+    clearInterval(timerId)
+    setTimerId(null)
+    // this.setState({ timerId: null })
   }
 
-  componentDidUpdate(prevProps) {
-    const { timer, completed } = this.props
-    const { timerId } = this.state
-    if ((prevProps.timer !== timer && timer <= 0) || completed) {
+  useEffect(() => {
+    if (timer <= 0 || completed) {
       clearInterval(timerId)
     }
-  }
-
-  runTimer = () => {
-    const { subTime, timer } = this.props
-    const { timerId } = this.state
-    if (!timerId && timer > 0) {
-      this.setState({
-        timerId: setInterval(() => {
-          subTime()
-        }, 1000),
-      })
+    return () => {
+      console.log('unmount')
+      stopTimer()
     }
-  }
+  }, [timer])
 
-  stopTimer = () => {
-    const { timerId } = this.state
-    clearInterval(timerId)
-    this.setState({ timerId: null })
-  }
+  // componentDidUpdate(prevProps) {
+  //   const { timer, completed } = this.props
+  //   const { timerId } = this.state
+  //   if ((prevProps.timer !== timer && timer <= 0) || completed) {
+  //     clearInterval(timerId)
+  //   }
+  // }
 
-  componentWillUnmount() {
-    this.stopTimer()
-  }
+  const runTimer = useCallback(() => {
+    if (!timerId && timer > 0) {
+      setTimerId(
+        useInterval(subTime(), 1000)
+        // setInterval(() => {
+        //   subTime()
+        // }, 1000)
+      )
+      // this.setState({
+      //   timerId: setInterval(() => {
+      //     subTime()
+      //   }, 1000),
+      // })
+    }
+  }, [timer])
 
-  submitTask = (e) => {
-    const { labelState } = this.state
-    const { editLabelTask } = this.props
+  // componentWillUnmount() {
+  //   this.stopTimer()
+  // }
+
+  const submitTask = (e) => {
+    //   const { labelState } = this.state
+    //   const { editLabelTask } = this.props
     e.preventDefault()
     if (labelState) {
       editLabelTask(labelState)
-      this.setState({
-        editing: false,
-      })
+      setEditing(false)
+      // this.setState({
+      //   editing: false,
+      // })
     }
   }
 
-  classTask = () => {
-    const { editing } = this.state
-    const { completed } = this.props
-    let classTask = 'task'
-    if (editing) classTask += ' editing'
-    if (completed) classTask += ' completed'
-    return classTask
+  const classTask = () => {
+    let classTaskName = 'task'
+    if (editing) classTaskName += ' editing'
+    if (completed) classTaskName += ' completed'
+    return classTaskName
   }
 
-  editTask = () => {
-    this.setState({
-      editing: true,
-    })
+  const editTask = () => {
+    setEditing(true)
+    // this.setState({
+    //   editing: true,
+    // })
   }
 
-  render() {
-    // eslint-disable-next-line prettier/prettier
-    const { id, label, publicDate, completed, onDeleted, completeTask, timer } =
-      this.props
-    const { labelState } = this.state
-    const distanceTime = formatDistanceToNow(publicDate, {
-      addSuffix: true,
-    })
+  // render() {
+  // eslint-disable-next-line prettier/prettier
+  // const { id, label, publicDate, completed, onDeleted, completeTask, timer } =
+  //   this.props
+  // const { labelState } = this.state
+  const distanceTime = formatDistanceToNow(publicDate, {
+    addSuffix: true,
+  })
 
-    return (
-      <li className={this.classTask()}>
-        <div className="view">
-          <input
-            id={id}
-            className="toggle"
-            type="checkbox"
-            onChange={completeTask}
-            checked={completed}
+  return (
+    <li className={classTask()}>
+      <div className="view">
+        <input
+          id={id}
+          className="toggle"
+          type="checkbox"
+          onChange={completeTask}
+          checked={completed}
+        />
+        <label htmlFor={id}>
+          <span tabIndex="-1" role="button" className="title">
+            {label}
+          </span>
+          <Timer
+            publicDate={publicDate}
+            timer={timer}
+            runTimer={runTimer}
+            stopTimer={stopTimer}
+            completed={completed}
           />
-          <label htmlFor={id}>
-            <span tabIndex="-1" role="button" className="title">
-              {label}
-            </span>
-            <Timer
-              publicDate={publicDate}
-              timer={timer}
-              runTimer={this.runTimer}
-              stopTimer={this.stopTimer}
-              completed={completed}
-            />
-            <span className="description">created {distanceTime}</span>
-          </label>
-          <button
-            type="button"
-            className="icon icon-edit"
-            onClick={this.editTask}
-            aria-label="Edit task"
-          />
-          <button
-            type="button"
-            className="icon icon-destroy"
-            onClick={onDeleted}
-            aria-label="Delete task"
-          />
-        </div>
-        <form onSubmit={this.submitTask}>
-          <input
-            type="text"
-            className="edit"
-            value={labelState}
-            onChange={this.onLabelChange}
-          />
-        </form>
-      </li>
-    )
-  }
+          <span className="description">created {distanceTime}</span>
+        </label>
+        <button
+          type="button"
+          className="icon icon-edit"
+          onClick={editTask}
+          aria-label="Edit task"
+        />
+        <button
+          type="button"
+          className="icon icon-destroy"
+          onClick={onDeleted}
+          aria-label="Delete task"
+        />
+      </div>
+      <form onSubmit={submitTask}>
+        <input
+          type="text"
+          className="edit"
+          value={labelState}
+          onChange={onLabelChange}
+        />
+      </form>
+    </li>
+  )
+  // }
 }
+
+export default Task
 
 Task.defaultProps = {
   completed: false,
