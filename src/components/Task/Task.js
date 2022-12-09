@@ -116,7 +116,6 @@ function Task({
       </form>
     </li>
   )
-  // }
 }
 
 export default Task

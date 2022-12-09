@@ -13,13 +13,11 @@ function TaskList({ todos, onDeleted, completeTask, editLabelTask, subTime }) {
         label={label}
         publicDate={publicDate}
         timer={timer}
-        // onTimer={onTimer}
         completed={completed}
         onDeleted={() => onDeleted(id)}
         completeTask={() => completeTask(id)}
         editLabelTask={(text) => editLabelTask(id, text)}
         subTime={() => subTime(id)}
-        // onClickTimer={() => onClickTimer(id)}
       />
     )
   })
@@ -35,13 +33,11 @@ TaskList.propTypes = {
       publicDate: PropTypes.instanceOf(Date),
       id: PropTypes.string.isRequired,
       timer: PropTypes.number.isRequired,
-      // onTimer: PropTypes.func.isRequired,
     })
   ).isRequired,
   onDeleted: PropTypes.func.isRequired,
   completeTask: PropTypes.func.isRequired,
   editLabelTask: PropTypes.func.isRequired,
-  // onClickTimer: PropTypes.func.isRequired,
   subTime: PropTypes.func.isRequired,
 }
 
