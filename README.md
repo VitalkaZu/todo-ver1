@@ -1,1 +1,1 @@
-https://todo-ver1-vitalkazu.vercel.app/
+https://todo-ver1.vercel.app/
