@@ -12,13 +12,6 @@ function Timer({ runTimer, stopTimer, completed, timer }) {
     stopTimer()
   }, [completed])
 
-  // componentDidUpdate(prevProps) {
-  //   const { stopTimer, completed } = this.props
-  //   if (completed !== prevProps.completed) {
-  //     stopTimer()
-  //   }
-  // }
-
   return (
     <span className="description">
       <button
